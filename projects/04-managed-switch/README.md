@@ -49,6 +49,12 @@ The physical Ethernet interface `nic0` was UP and connected to the Proxmox Linux
 
 This demonstrated how Proxmox uses a Linux bridge to connect the physical network interface and virtualized workloads to the physical LAN.
 
+#### Evidence — Proxmox Network Configuration
+
+![Proxmox network interface and routing configuration](images/01-proxmox-network-configuration.png)
+
+*Proxmox network configuration showing the physical NIC, `vmbr0` Linux bridge, `192.168.1.53/24` management address, and default route through `192.168.1.1`.*
+
 ### Routing Verification
 
 Used `ip route` to inspect the host routing table.
@@ -81,6 +87,12 @@ Results:
 
 This demonstrated a layered troubleshooting approach: verify local connectivity first, then upstream IP connectivity, and finally DNS resolution.
 
+#### Evidence — Layered Connectivity Testing
+
+![Gateway internet and DNS connectivity testing](images/02-connectivity-dns-testing.png)
+
+*Successful testing of the local default gateway, external IP connectivity, and DNS name resolution.*
+
 ### ARP and Neighbor Discovery
 
 Used `ip neigh` to inspect the Linux neighbor table and identify the MAC address associated with the default gateway.
@@ -104,6 +116,12 @@ After communication with the gateway resumed, the neighbor table was checked aga
 This demonstrated how ARP is used to resolve a local IPv4 address to the MAC address required for Layer 2 Ethernet communication.
 
 The exercise also reinforced that when traffic is destined for a device outside the local subnet, the host does not ARP for the remote destination's MAC address. Instead, it forwards the Ethernet frame to the MAC address of its default gateway while the IP packet remains addressed to the remote destination.
+
+#### Evidence — ARP Neighbor Relearning
+
+![ARP neighbor cache relearning test](images/03-arp-neighbor-relearning.png)
+
+*The gateway neighbor entry was removed, communication was reinitiated, and the Proxmox host relearned the gateway's MAC address through ARP.*
 
 ### Managed Switch Administration
 
@@ -148,6 +166,20 @@ This confirmed:
 * Ethernet auto-negotiation successfully restored the link
 
 This exercise demonstrated how physical link-state information on a managed switch can be used to identify and troubleshoot endpoint connections.
+
+#### Evidence — Physical Link-State Troubleshooting
+
+**Server disconnected:**
+
+![TP-Link Port 5 link down](images/04-server-port-link-down.png)
+
+*Port 5 transitioned to `Link Down` when the Proxmox server's Ethernet connection was disconnected.*
+
+**Server reconnected:**
+
+![TP-Link Port 5 active at 1 Gbps](images/05-server-port-1gbps.png)
+
+*Port 5 returned at `1000M` after reconnecting the server, confirming the Proxmox host's physical switch port and negotiated link speed.*
 
 ### Troubleshooting Methodology
 
