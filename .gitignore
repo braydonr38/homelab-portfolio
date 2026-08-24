@@ -1,0 +1,19 @@
+# Secrets
+*.key
+*.pem
+*.pfx
+*.p12
+.env
+.env.*
+secrets/
+credentials/
+
+# OS/editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Temporary files
+*.tmp
+*.log
