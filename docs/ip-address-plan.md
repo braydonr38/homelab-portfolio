@@ -4,16 +4,17 @@
 
 ## Existing Home LAN
 
-**Network:** `192.168.1.0/24`
-**Subnet Mask:** `255.255.255.0`
+**Network:** `192.168.1.0/24`  
+**Subnet Mask:** `255.255.255.0`  
 **Default Gateway:** `192.168.1.1`
 
-| Device            | IP Address     | Address Assignment       | Notes                                                             |
-| ----------------- | -------------- | ------------------------ | ----------------------------------------------------------------- |
-| Spectrum Router   | `192.168.1.1`  | Router / Default Gateway | Main LAN gateway and current DNS resolver                         |
-| Proxmox Server    | `192.168.1.53` | DHCP reservation         | Dell OptiPlex 5070 Micro; Proxmox management interface on `vmbr0` |
-| TP-Link TL-SG108E | `192.168.1.9`  | Management address       | Managed switch web interface                                      |
-| Admin PC          | DHCP           | DHCP                     | Primary management workstation                                    |
+| Device            | IP Address     | Address Assignment       | Notes                                                                                       |
+| ----------------- | -------------- | ------------------------ | ------------------------------------------------------------------------------------------- |
+| Spectrum Router   | `192.168.1.1`  | Router / Default Gateway | Main LAN gateway and current DNS resolver                                                   |
+| Proxmox Server    | `192.168.1.53` | DHCP reservation         | Dell OptiPlex 5070 Micro; Proxmox management interface on `vmbr0`                           |
+| Ubuntu Server VM  | `192.168.1.10` | DHCP                     | `ubuntu-srv01`; VM 100 hosted on Proxmox and connected to the LAN through `vmbr0`           |
+| TP-Link TL-SG108E | `192.168.1.9`  | Management address       | Managed switch web interface                                                                |
+| Admin PC          | DHCP           | DHCP                     | Primary management workstation                                                              |
 
 ## Physical Network Notes
 
@@ -21,6 +22,7 @@
 * Proxmox server link negotiates at **1 Gbps**.
 * Proxmox management traffic uses the `vmbr0` Linux bridge.
 * The Proxmox physical Ethernet interface `nic0` is attached to `vmbr0`.
+* `ubuntu-srv01` uses a VirtIO virtual NIC connected to `vmbr0`, allowing the VM to access the physical LAN through the Proxmox host.
 * The current home LAN uses the `192.168.1.0/24` subnet.
 * Traffic destined outside the local subnet is forwarded to the default gateway at `192.168.1.1`.
 
